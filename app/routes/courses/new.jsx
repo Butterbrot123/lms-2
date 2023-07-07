@@ -25,6 +25,9 @@ export async function action({ request }) {
       user: session.get("userId"),
     });
     await newCourse.save();
+    const teacher = await db.models.Teacher.findById(session.get("userId"));
+    teacher.courses.push(newCourse);
+    await teacher.save();
     return redirect(`/courses/${newCourse._id}`);
   } catch (error) {
     return json(

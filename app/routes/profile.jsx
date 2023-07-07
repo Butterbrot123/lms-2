@@ -12,17 +12,15 @@ export async function loader({ params, request }) {
   const teacher = await db.models.Teacher.findById(userId);
   console.log(teacher)
 
-  const course = await db.models.Course.findById(params.courseId);
+  console.log("test")
+
+  console.log(teacher.courses)
+
+  const course = await db.models.Course.find();
 
   console.log(course)  
   console.log(params.courseId)
 
-  if (!course) {
-    throw new Response(`Couldn't find Course with id ${params.courseId}`, {
-      status: 404,
-      statusText: "Not Found",
-    });
-  }
 
   if (!course) {
     throw new Response(`Couldn't find Course with id ${params.courseId}`, {
