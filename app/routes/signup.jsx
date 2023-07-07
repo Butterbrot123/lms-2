@@ -1,10 +1,13 @@
 import { useActionData } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server";
-import { getSession } from "~/sessions.server";
+import { getSession, requireUserSession } from "~/sessions.server";
 import bcrypt from 'bcryptjs';
 import { json, redirect } from "@remix-run/node";
 
-
+export async function loader({ request }) {
+  await requireUserSession(request);
+  return null;
+}
 
 export async function action({ request }) {
   const session = await getSession(request);
