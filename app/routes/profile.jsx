@@ -1,44 +1,23 @@
 import { useLoaderData, Form, Link } from "@remix-run/react";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server.js";
 import { requireUserSession } from "~/sessions.server";
-
 
 export async function loader({ params, request }) {
   const session = await requireUserSession(request);
   const db = connectDb();
-
-  const userId = session.get("userId") 
+  const userId = session.get("userId");
   const teacher = await db.models.Teacher.findById(userId);
-  console.log(teacher)
+  const courses = await db.models.Course.find({ user: userId });
 
-  console.log("test")
-
-  console.log(teacher.courses)
-
-  const course = await db.models.Course.find();
-
-  console.log(course)  
-  console.log(params.courseId)
-
-
-  if (!course) {
+  if (!courses) {
     throw new Response(`Couldn't find Course with id ${params.courseId}`, {
       status: 404,
       statusText: "Not Found",
     });
   }
-  if (course.user.toString() !== session.get("userId")) {
-    throw new Response(`You don't have permission to view this course`, {
-      status: 403,
-    });
-  }
-  
-  const courses = []; 
 
- // const teacher = await db.models.Teacher.findById(course.user.toString());
   if (!teacher) {
-
     // TODO: change
     throw new Response(`Couldn't find Course with id ${params.courseId}`, {
       status: 404,
@@ -54,19 +33,11 @@ export async function loader({ params, request }) {
     email,
     firstName,
     lastName,
-   
   });
 }
 
 export default function Index() {
-  const {
-    courses,
-    username,
-    email,
-    firstName,
-    lastName,
-    
-  } = useLoaderData();
+  const { courses, username, email, firstName, lastName } = useLoaderData();
 
   // Sort courses by createdAt date in descending order
   const sortedCourses = [...courses].sort(
@@ -77,31 +48,38 @@ export default function Index() {
     <>
       <div className="flex">
         <ul>
-          <h1 className="text-4xl font-bold mb-4">
+          <h1 className="mb-4 text-4xl font-bold">
             Hello, {username}! Welcome to your profile.
           </h1>
-          <span className="font-bold text-2xl mb-4">Email:</span> {email}
+          <span className="mb-4 text-2xl font-bold">Email:</span> {email}
           <br />
           <span className="font-bold">First Name:</span> {firstName}
           <br />
           <span className="font-bold">Last Name:</span> {lastName}
           <br />
           <br />
-
-          <h2 className="text-3xl font-bold mb-4">Your Courses:</h2>
+          <h2 className="mb-4 text-3xl font-bold">Your Courses:</h2>
           {courses.length < 1 && <div>You don't have any courses yet.</div>}
           {sortedCourses.map((course) => {
+            // TODO: fix me or delete me
             return (
               <div key={course._id}>
-
+                <br />
+                <h1></h1> {course.course}
+                <br />
+                <br />
                 <Link
-                  to={`/${course._id}/edit`}
-                  className="bg-blue-400 py-2 px-3 rounded"
+                  to={`/courses/${course._id}/edit`}
+                  className="rounded bg-blue-400 px-3 py-2"
                 >
                   Edit
                 </Link>
-                <Form method="delete" action={`/${course._id}`}>
-                  <button type="submit" className="bg-blue-400 py-2 px-3 rounded">
+                
+                <Form method="delete" action={"/courses"}>
+                  <button
+                    type="submit"
+                    className="rounded bg-blue-400 px-3 py-2"
+                  >
                     Delete
                   </button>
                 </Form>
