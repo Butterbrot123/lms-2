@@ -1,6 +1,6 @@
 import { useActionData } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server";
-import { getSession, requireUserSession } from "~/sessions.server";
+import { requireUserSession } from "~/sessions.server";
 import bcrypt from "bcryptjs";
 import { json, redirect } from "@remix-run/node";
 
@@ -10,13 +10,10 @@ export async function loader({ request }) {
 }
 
 export async function action({ request }) {
-  const session = await requireUserSession(request);
   const db = connectDb();
   const formData = await request.formData();
   let data = Object.fromEntries(formData);
-  const Teacher = db.models.Teacher.find({
-    user: session.get("userId"),
-  });
+
 
   // Check if any required fields are empty
   if (
