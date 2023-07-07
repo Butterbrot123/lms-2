@@ -1,0 +1,37 @@
+{
+  "name": "awu-exam-starter",
+  "private": true,
+  "description": "",
+  "license": "",
+  "sideEffects": false,
+  "scripts": {
+    "build": "remix build",
+    "dev": "remix dev",
+    "format": "prettier --write .",
+    "start": "remix-serve build"
+  },
+  "prettier": {},
+  "dependencies": {
+    "@remix-run/node": "1.14.3",
+    "@remix-run/react": "1.14.3",
+    "@remix-run/serve": "1.14.3",
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "isbot": "3.6.8",
+    "mongoose": "7.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tailwindcss": "3.3.2"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "1.14.3",
+    "@remix-run/eslint-config": "1.14.3",
+    "eslint": "8.41.0",
+    "eslint-config-prettier": "8.8.0",
+    "prettier": "2.8.8",
+    "prettier-plugin-tailwindcss": "0.3.0"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
