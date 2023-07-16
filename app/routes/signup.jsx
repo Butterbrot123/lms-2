@@ -1,23 +1,17 @@
 import { useActionData } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server";
-import { requireUserSession } from "~/sessions.server";
 import bcrypt from "bcryptjs";
 import { json, redirect } from "@remix-run/node";
 
 export async function action({ request }) {
   const db = connectDb();
   const formData = await request.formData();
-  let data = Object.fromEntries(formData);
-
+  const data = Object.fromEntries(formData);
 
   // Check if any required fields are empty
-  if (
-    data.password === "" ||
-    data.username === "" ||
-    data.email === "" ||
-    data.firstName === "" ||
-    data.lastName === ""
-  ) {
+  const requiredFields = ["username", "emailaddress", "firstName", "lastName", "password", "passwordConfirm"];
+  const emptyFields = requiredFields.filter(field => !data[field]);
+  if (emptyFields.length > 0) {
     return json(
       { errorMessage: "Please fill out all fields", values: data },
       { status: 400 }
@@ -52,24 +46,30 @@ export async function action({ request }) {
 
 export default function Register() {
   const errors = useActionData();
-  const dataAction = useActionData();
+
   return (
     <div>
       {errors && <div>{errors.errorMessage}</div>}
 
-      <div>Register</div>
-      <form method="post" action="/signup">
+      <h1 className="text-2xl font-bold mb-4">Register</h1>
+      <form method="post" action="/signup" className="space-y-4">
         <div>
-          <label>Username:</label>
+          <label htmlFor="username" className="block">
+            Username:
+          </label>
           <input
             type="text"
             name="username"
             id="username"
             placeholder="Username"
+            className="rounded border border-gray-300 px-3 py-2 text-slate-700"
           />
         </div>
-        <div className="mb-4">
-          <label htmlFor="firstName">First Name</label>
+
+        <div>
+          <label htmlFor="firstName" className="block">
+            First Name:
+          </label>
           <input
             type="text"
             name="firstName"
@@ -79,8 +79,10 @@ export default function Register() {
           />
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="lastName">Last Name</label>
+        <div>
+          <label htmlFor="lastName" className="block">
+            Last Name:
+          </label>
           <input
             type="text"
             name="lastName"
@@ -91,36 +93,47 @@ export default function Register() {
         </div>
 
         <div>
-          <label>Email Address:</label>
+          <label htmlFor="emailaddress" className="block">
+            Email Address:
+          </label>
           <input
             type="text"
             name="emailaddress"
             id="emailaddress"
             placeholder="Email Address"
+            className="rounded border border-gray-300 px-3 py-2 text-slate-700"
           />
         </div>
+
         <div>
-          <label>Password:</label>
+          <label htmlFor="password" className="block">
+            Password:
+          </label>
           <input
             type="password"
             name="password"
             id="password"
             placeholder="Password"
-            defaultValue={dataAction?.values?.password}
+            className="rounded border border-gray-300 px-3 py-2 text-slate-700"
           />
         </div>
 
         <div>
-          <label htmlFor="passwordConfirm">Confirm Password</label>
+          <label htmlFor="passwordConfirm" className="block">
+            Confirm Password:
+          </label>
           <input
-            type="passwordConfirm"
+            type="password"
             name="passwordConfirm"
-            id="passwordConfirm "
-            placeholder="repeat password"
-            defaultValue={dataAction?.values?.passwordConfirm}
+            id="passwordConfirm"
+            placeholder="Repeat Password"
+            className="rounded border border-gray-300 px-3 py-2 text-slate-700"
           />
         </div>
-        <button type="submit">Register</button>
+
+        <button type="submit" className="bg-blue-500 text-white rounded px-4 py-2">
+          Register
+        </button>
       </form>
     </div>
   );
