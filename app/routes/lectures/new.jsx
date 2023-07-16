@@ -17,13 +17,16 @@ export async function action({ request }) {
   const form = await request.formData();
   const db = connectDb();
 
-  console.log(form)
+  console.log(form);
 
   try {
     const userId = session.get("userId");
-    const course = await db.models.Course.find({ course: form.get("courses"), user: userId})
+    const course = await db.models.Course.find({
+      course: form.get("courses"),
+      user: userId,
+    });
     console.log(course);
-    console.log(course.length)
+    console.log(course.length);
     const newLecture = new db.models.Lecture({
       title: form.get("title"),
       courses: [course._id],
@@ -33,10 +36,9 @@ export async function action({ request }) {
       user: userId,
     });
     await newLecture.save();
-    
+
     return redirect(`/lectures/${newLecture._id}`);
   } catch (error) {
-    console.log(error)
     return json(
       { errors: error.errors, values: Object.fromEntries(form) },
       { status: 400 }
