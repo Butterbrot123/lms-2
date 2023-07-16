@@ -1,11 +1,15 @@
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { redirect, json } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server.js";
 import { requireUserSession } from "~/sessions.server";
 
-export async function loader({ request }) {
-  await requireUserSession(request);
-  return null;
+export async function loader({ params, request }) {
+  const session = await requireUserSession(request);
+  const db = connectDb();
+  const courses = await db.models.Course.find({
+    user: session.get("userId"),
+  });
+  return json(courses);
 }
 
 export async function action({ request }) {
@@ -18,7 +22,7 @@ export async function action({ request }) {
       course: form.get("course"),
       description: form.get("description"),
       date: Date(form.get("date")),
-      time: Number(form.get("time")),
+      time: Date(form.get("time")),
       user: session.get("userId"),
     });
     await newLecture.save();
@@ -36,6 +40,11 @@ export async function action({ request }) {
 
 export default function CreateLecture() {
   const actionData = useActionData();
+  const loaderData = useLoaderData();
+  let optionItems = loaderData.map((course) => (
+    <option key={course._id}>{course.course}</option>
+  ));
+
   return (
     <div>
       <h1 className="mb-4 text-2xl font-bold">Create Lecture</h1>
@@ -52,12 +61,14 @@ export default function CreateLecture() {
             defaultValue={actionData?.values.lecture}
             className={[
               "rounded border p-2",
-              actionData?.errors.lecture ? "border-red-500" : "border-orange-200",
+              actionData?.errors.lecture
+                ? "border-red-500"
+                : "border-orange-200",
             ].join(" ")}
           />
-          {actionData?.errors.course && (
+          {actionData?.errors.lecture && (
             <p className="mt-1 text-red-500">
-              {actionData.errors.course.message}
+              {actionData.errors.lecture.message}
             </p>
           )}
         </div>
@@ -66,22 +77,7 @@ export default function CreateLecture() {
           <label htmlFor="education" className="block font-semibold">
             Course:
           </label>
-          <input
-            type="text"
-            name="education"
-            id="education"
-            placeholder="Education"
-            defaultValue={actionData?.values.education}
-            className={[
-              "rounded border p-2",
-              actionData?.errors.education ? "border-red-500" : "border-orange-200",
-            ].join(" ")}
-          />
-          {actionData?.errors.education && (
-            <p className="mt-1 text-red-500">
-              {actionData.errors.education.message}
-            </p>
-          )}
+          <select>{optionItems}</select>
         </div>
 
         <div className="mb-4">
@@ -96,7 +92,9 @@ export default function CreateLecture() {
             defaultValue={actionData?.values.description}
             className={[
               "rounded border p-2",
-              actionData?.errors.description ? "border-red-500" : "border-orange-200",
+              actionData?.errors.description
+                ? "border-red-500"
+                : "border-orange-200",
             ].join(" ")}
           />
           {actionData?.errors.description && (
@@ -128,7 +126,6 @@ export default function CreateLecture() {
           )}
         </div>
 
-
         <div className="mb-4">
           <label htmlFor="time" className="block font-semibold">
             time:
@@ -150,7 +147,6 @@ export default function CreateLecture() {
             </p>
           )}
         </div>
-
 
         <button
           type="submit"
