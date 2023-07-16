@@ -43,34 +43,19 @@ export default function Editcourse() {
             actionData?.errors.lecture ? "border-red-500" : "border-orange-200",
           ].join(" ")}
         />
-        {actionData?.errors.course && (
+        {actionData?.errors.lecture && (
           <p className="mt-1 text-red-500">
-            {actionData.errors.course.message}
+            {actionData.errors.lecture.message}
           </p>
         )}
       </div>
 
       <div className="mb-4">
-        <label htmlFor="course" className="block font-semibold">
-          Course:
-        </label>
-        <input
-          type="text"
-          name="Course"
-          id="Course"
-          placeholder="Course"
-          defaultValue={lecture.course ?? actionData?.course.date}
-          className={[
-            "rounded border p-2",
-            actionData?.errors.course ? "border-red-500" : "border-orange-200",
-          ].join(" ")}
-        />
-        {actionData?.errors.course && (
-          <p className="mt-1 text-red-500">
-            {actionData.errors.course.message}
-          </p>
-        )}
-      </div>
+          <label htmlFor="education" className="block font-semibold">
+            Course:
+          </label>
+          <select>{optionItems}</select>
+        </div>
 
       <div className="mb-4">
         <label htmlFor="description" className="block font-semibold">

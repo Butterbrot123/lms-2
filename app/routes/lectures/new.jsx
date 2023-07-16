@@ -16,21 +16,27 @@ export async function action({ request }) {
   const session = await requireUserSession(request);
   const form = await request.formData();
   const db = connectDb();
+
+  console.log(form)
+
   try {
+    const userId = session.get("userId");
+    const course = await db.models.Course.find({ course: form.get("courses"), user: userId})
+    console.log(course);
+    console.log(course.length)
     const newLecture = new db.models.Lecture({
       title: form.get("title"),
-      course: form.get("course"),
+      courses: [course._id],
       description: form.get("description"),
       date: Date(form.get("date")),
       time: Date(form.get("time")),
-      user: session.get("userId"),
+      user: userId,
     });
     await newLecture.save();
-    const teacher = await db.models.Lecture.findById(session.get("userId"));
-    teacher.courses.push(newLecture);
-    await teacher.save();
+    
     return redirect(`/lectures/${newLecture._id}`);
   } catch (error) {
+    console.log(error)
     return json(
       { errors: error.errors, values: Object.fromEntries(form) },
       { status: 400 }
@@ -55,8 +61,8 @@ export default function CreateLecture() {
           </label>
           <input
             type="text"
-            name="lecture"
-            id="lecture"
+            name="title"
+            id="title"
             placeholder="Lecture"
             defaultValue={actionData?.values.lecture}
             className={[
@@ -77,7 +83,10 @@ export default function CreateLecture() {
           <label htmlFor="education" className="block font-semibold">
             Course:
           </label>
-          <select>{optionItems}</select>
+
+          <select id="courses" placeholder="courses" name="courses">
+            {optionItems}
+          </select>
         </div>
 
         <div className="mb-4">
