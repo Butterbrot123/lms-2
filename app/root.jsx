@@ -58,12 +58,26 @@ export default function App() {
               >
                 New course
               </Link>
+
+              <Link
+                to="/lectures/new"
+                className="ml-3 text-orange-600 hover:underline"
+              >
+                New lecture
+              </Link>
   
               <Link
                 to="/profile"
                 className="ml-3 text-orange-600 hover:underline"
               >
                 Profile
+              </Link>
+
+              <Link
+                to="/explore"
+                className="ml-3 text-orange-600 hover:underline"
+              >
+                Explore
               </Link>
   
               <Form method="post" action="/logout" className="ml-auto inline">
