@@ -23,7 +23,7 @@ const sanitizedSearchTerm = searchTerm.toLowerCase().trim()
 
 if (sanitizedSearchTerm) {
   filteredCourses = courses.filter(course => {
-    return course.title.toLowerCase().includes(sanitizedSearchTerm) //|| album.artist.toLowerCase().includes(sanitizedSearchTerm)
+    return course.course.toLowerCase().includes(sanitizedSearchTerm) 
   })
 }
 
@@ -39,7 +39,7 @@ if (sanitizedSearchTerm) {
           placeholder="Filter by Course"
           className="mb-3 w-full rounded border border-orange-200 p-2"
         />
-        <p>{searchTerm}</p>
+        
         <ul className="ml-5 list-disc">
           {filteredCourses.map((course) => {
             return (
