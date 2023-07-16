@@ -255,14 +255,9 @@ export async function action({ request, params }) {
     course.semester = Number(form.get("semester"));
     course.lecture = form.get("lecture").split("\n").toString();
 
-    console.log(course.user.toString());
-
     await course.save();
-    console.log("kom igennem save");
     return redirect(`/courses/${course._id}`);
   } catch (error) {
-    console.log("❤️‍🔥");
-    console.log(error);
     return json(
       { errors: error.errors, values: Object.fromEntries(form) },
       { status: 400 }

@@ -1,5 +1,5 @@
 import { useLoaderData, Form, Link } from "@remix-run/react";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server.js";
 import { requireUserSession } from "~/sessions.server";
 
@@ -45,49 +45,47 @@ export default function Index() {
   );
 
   return (
-    <>
-      <div className="flex">
-        <ul>
-          <h1 className="mb-4 text-4xl font-bold">
-            Hello, {username}! Welcome to your profile.
-          </h1>
-          <span className="mb-4 text-2xl font-bold">Email:</span> {email}
-          <br />
-          <span className="font-bold">First Name:</span> {firstName}
-          <br />
-          <span className="font-bold">Last Name:</span> {lastName}
-          <br />
-          <br />
-          <h2 className="mb-4 text-3xl font-bold">Your Courses:</h2>
-          {courses.length < 1 && <div>You don't have any courses yet.</div>}
-          {sortedCourses.map((course) => {
-            // TODO: fix me or delete me
-            return (
-              <div key={course._id}>
-                <br />
-                <h1></h1> {course.course}
-                <br />
-                <br />
-                <Link
-                  to={`/courses/${course._id}/edit`}
-                  className="rounded bg-blue-400 px-3 py-2"
-                >
-                  Edit
-                </Link>
-                
-                <Form method="delete" action={"/courses"}>
-                  <button
-                    type="submit"
-                    className="rounded bg-blue-400 px-3 py-2"
-                  >
-                    Delete
-                  </button>
-                </Form>
-              </div>
-            );
-          })}
-        </ul>
+    <div className="flex flex-col items-start">
+      <h1 className="mb-4 text-4xl font-bold">
+        Hello, {username}! Welcome to your profile.
+      </h1>
+      <div className="mb-4">
+        <span className="text-2xl font-bold">Email:</span> {email}
       </div>
-    </>
+      <div className="mb-4">
+        <span className="font-bold">First Name:</span> {firstName}
+      </div>
+      <div className="mb-4">
+        <span className="font-bold">Last Name:</span> {lastName}
+      </div>
+      <div className="mb-4">
+        <h2 className="text-3xl font-bold">Your Courses:</h2>
+        <br></br>
+        {courses.length < 1 && <div>You don't have any courses yet.</div>}
+        {sortedCourses.map((course) => (
+          <div key={course._id} className="mb-4">
+            <h1 className="text-xl font-bold">{course.course}</h1>
+            <br></br>
+            <div className="flex space-x-2">
+              <br></br>
+              <Link
+                to={`/courses/${course._id}/edit`}
+                className="rounded bg-blue-400 px-3 py-2 text-white"
+              >
+                Edit
+              </Link>
+              <Form method="delete" action={`/courses/${course._id}`}>
+                <button
+                  type="submit"
+                  className="rounded bg-red-500 px-3 py-2 text-white"
+                >
+                  Delete
+                </button>
+              </Form>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
