@@ -37,6 +37,7 @@ const teacherSchema = new Schema({
     trim: true,
     minLength: [3, "That's too short"],
   },
+  
 
   courses: {
     type: [mongoose.Schema.Types.ObjectId],
@@ -52,13 +53,20 @@ const courseSchema = new Schema({
     required: true,
     minLength: [2, "That's too short"],
   },
+
+  teacher: {
+    type: String,
+    required: true,
+    minLength: [2, "That's too short"],
+  },
+
   education: {
     type: String,
     required: true,
     minLength: [2, "That's too short"],
   },
 
-  CourseDates: {
+ /* CourseDates: {
     type: {
       start: {
         type: Date,
@@ -87,6 +95,8 @@ const courseSchema = new Schema({
       searching: { type: Boolean, required: true },
     },
   },
+
+  */
 
   startdate: {
     type: Date,
@@ -129,6 +139,11 @@ const courseSchema = new Schema({
 const lectureSchema = new Schema(
   {
     title: {
+      type: String,
+      required: true,
+      minLength: [2, "That's too short"],
+    },
+    teacher: {
       type: String,
       required: true,
       minLength: [2, "That's too short"],
