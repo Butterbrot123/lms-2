@@ -17,6 +17,7 @@ export async function action({ request }) {
       course: form.get("course"),
       education: form.get("education"),
       description: form.get("description"),
+      teacher: form.get("teacher"),
       startdate: Date(form.get("startdate")),
       enddate: Date(form.get("enddate")),
       ects: Number(form.get("ects")),
@@ -197,6 +198,27 @@ export default function CreateCourse() {
             </p>
           )}
         </div>
+        
+<label htmlFor="teacher" className="mb-1 block font-semibold">
+          Teacher:
+        </label>
+        <input
+          type="text"
+          name="teacher"
+          id="teacher"
+          placeholder="Teacher"
+          defaultValue={actionData?.values.semester}
+          className={[
+            "rounded border border-orange-200  p-2",
+            actionData?.errors.teacher ? "border-2 border-red-500" : "",
+          ].join(" ")}
+        />
+        {actionData?.errors.teacher && (
+          <p className="mb-0 mt-1 text-red-500">
+            {actionData.errors.teacher.message}
+          </p>
+        )}
+
 
         <div className="mb-4">
           <label htmlFor="lecture" className="block font-semibold">
