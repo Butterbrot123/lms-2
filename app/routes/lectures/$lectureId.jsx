@@ -23,6 +23,7 @@ export async function loader({ params, request }) {
 
 export default function LecturePage() {
   const lecture = useLoaderData();
+  
   return (
     <div>
       <div className="flex flex-row items-center gap-1">
@@ -41,25 +42,37 @@ export default function LecturePage() {
         </Link>
       </div>
       <dl className="my-3">
-      <dt className="my-1 text-lg font-bold">title:</dt>
+      <dt className="my-1 text-lg font-bold">Lecture:</dt>
         <dd className="my-2 ">{lecture.title}</dd>
+        <dt className="my-1 text-lg font-bold">Course:</dt>
+        <dd className="my-2 ">{lecture.courses}</dd>
         <dt className="my-1 text-lg font-bold">Description:</dt>
         <dd className="my-2 ">{lecture.description}</dd>
-        <dt className="my-1 text-lg font-bold">date:</dt>
-        <dd className="my-2">{lecture.date}</dd>
-        <dt className="my-1 text-lg font-bold">time:</dt>
-        <dd className="my-2">{lecture.time}</dd>
+        <dt className="my-1 text-lg font-bold">Date:</dt>
+        <dd className="my-2">{formatDate(lecture.date)}</dd>
+        <dt className="my-1 text-lg font-bold">Time:</dt>
+        <dd clasName="my-2">{formatTime(lecture.time)}</dd>
       </dl>
     </div>
   );
 }
-/*
-case "delete";
-const dbDelete = connectDb();
-await dbDelete.models.course.findByIdAndDelete(params.courseId);; 
-return json({
+// Function to format the date
+function formatDate(date) {
+  return new Date(date).toLocaleDateString("en-US");
+}
 
-*/
+// Function to format the time
+function formatTime(time) {
+  return new Date(time).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
+}
+
+
+//* lecture.courses ?
+
 
 export function CatchBoundary() {
   const caught = useCatch();

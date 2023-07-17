@@ -17,7 +17,6 @@ export async function action({ request }) {
   const form = await request.formData();
   const db = connectDb();
 
-  console.log(form);
 
   try {
     const userId = session.get("userId");
@@ -25,8 +24,6 @@ export async function action({ request }) {
       course: form.get("courses"),
       user: userId,
     });
-    console.log(course);
-    console.log(course.length);
     const newLecture = new db.models.Lecture({
       title: form.get("title"),
       courses: [course._id],
@@ -59,7 +56,7 @@ export default function CreateLecture() {
       <Form method="post">
         <div className="mb-4">
           <label htmlFor="course" className="block font-semibold">
-            Title:
+            Lecture:
           </label>
           <input
             type="text"
@@ -139,10 +136,10 @@ export default function CreateLecture() {
 
         <div className="mb-4">
           <label htmlFor="time" className="block font-semibold">
-            time:
+            Time:
           </label>
           <input
-            type="number"
+            type="Time"
             name="time"
             id="time"
             placeholder="time"

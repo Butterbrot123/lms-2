@@ -46,9 +46,9 @@ export default function CoursePage() {
         <dt className="my-1 text-lg font-bold">Description:</dt>
         <dd className="my-2 ">{course.description}</dd>
         <dt className="my-1 text-lg font-bold">Startdate:</dt>
-        <dd className="my-2">{course.startdate}</dd>
+        <dd className="my-2">{formatDate(course.startdate)}</dd>
         <dt className="my-1 text-lg font-bold">Enddate:</dt>
-        <dd className="my-2">{course.enddate}</dd>
+        <dd className="my-2">{formatDate(course.enddate)}</dd>
         <dt className="my-1 text-lg font-bold">semester:</dt>
         <dd className="my-2">{course.semester}</dd>
         <dt className="my-1 text-lg font-bold">ECTS:</dt>
@@ -69,13 +69,11 @@ export default function CoursePage() {
     </div>
   );
 }
-/*
-case "delete";
-const dbDelete = connectDb();
-await dbDelete.models.course.findByIdAndDelete(params.courseId);; 
-return json({
 
-*/
+// Function to format the date
+function formatDate(date) {
+  return new Date(date).toLocaleDateString("en-US");
+}
 
 export function CatchBoundary() {
   const caught = useCatch();

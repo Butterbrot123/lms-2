@@ -6,24 +6,25 @@ import { requireUserSession } from "~/sessions.server";
 export async function loader({ params, request }) {
   const session = await requireUserSession(request);
   const db = connectDb();
-  const lecture = await db.models.Lecture.findById(params.lectureId);
-  if (!lecture) {
-    throw new Response(`Couldn't find lecture with id ${params.lectureId}`, {
-      status: 404,
-      statusText: "Not Found",
-    });
-  }
-  if (lecture.user.toString() !== session.get("userId")) {
-    throw new Response(`You don't have permission to view this course`, {
-      status: 403,
-    });
-  }
-  return json(lecture);
+  const courses = await db.models.Course.find({
+    user: session.get("userId"),
+  });
+  return json(courses);
 }
 
+
+
+
 export default function Editcourse() {
+ 
   const lecture = useLoaderData();
   const actionData = useActionData();
+  const loaderData = useLoaderData();
+ let optionItems = loaderData.map((course) => (
+    <option key={course._id}>{course.course}</option>
+  ));
+
+  
   return (
     <div>
     <h1 className="mb-4 text-2xl font-bold">Create Lecture</h1>
@@ -37,7 +38,7 @@ export default function Editcourse() {
           name="lecture"
           id="lecture"
           placeholder="Lecture"
-          defaultValue={lecture.title ?? actionData?.values.title}
+          defaultValue={lecture.lecture ?? actionData?.values.lecture}
           className={[
             "rounded border p-2",
             actionData?.errors.lecture ? "border-red-500" : "border-orange-200",
@@ -54,7 +55,10 @@ export default function Editcourse() {
           <label htmlFor="education" className="block font-semibold">
             Course:
           </label>
-          <select>{optionItems}</select>
+
+          <select id="courses" placeholder="courses" name="courses">
+            {optionItems}
+          </select>
         </div>
 
       <div className="mb-4">
@@ -66,7 +70,7 @@ export default function Editcourse() {
           id="description"
           rows="4"
           placeholder="Description"
-          defaultValue={actionData?.values.description}
+          defaultValue={lecture.decription ?? actionData?.values.description}
           className={[
             "rounded border p-2",
             actionData?.errors.description ? "border-red-500" : "border-orange-200",
@@ -88,7 +92,7 @@ export default function Editcourse() {
           name="date"
           id="date"
           placeholder="Date"
-          defaultValue={actionData?.values.date}
+          defaultValue={lecture.date ?? actionData?.values.date}
           className={[
             "rounded border p-2",
             actionData?.errors.date ? "border-red-500" : "border-orange-200",
@@ -107,11 +111,11 @@ export default function Editcourse() {
           time:
         </label>
         <input
-          type="Date"
+          type="Time"
           name="time"
           id="time"
           placeholder="time"
-          defaultValue={actionData?.values.time}
+          defaultValue={lecture.time ?? actionData?.values.time}
           className={[
             "rounded border p-2",
             actionData?.errors.time ? "border-red-500" : "border-orange-200",
@@ -163,9 +167,8 @@ export async function action({ request, params }) {
   const db = connectDb();
 
   try {
+    //const userId = session.get("userId");
     const lecture = await db.models.Lecture.findById(params.lectureId);
-    console.log(lecture);
-    console.log(form.get("description"));
     if (!lecture) {
       return new Response(`Couldn't find lecture with id ${params.lectureId}`, {
         status: 404,
@@ -176,7 +179,7 @@ export async function action({ request, params }) {
         status: 403,
       });
     }
-    lecture.course = form.get("course");
+    lecture.courses = form.get("courses");
     lecture.title = form.get("title");
     lecture.date = Date(form.get("date"));
     lecture.time = Date(form.get("time"));
