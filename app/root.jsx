@@ -45,64 +45,68 @@ export default function App() {
         <Links />
       </head>
       <body className="bg-orange-50 p-4 font-sans text-amber-900">
-        <header className="mb-4 flex flex-row items-center border-b border-orange-200 pb-3">
-          <Link to="/courses" className="text-orange-600 hover:underline">
-            Home
-          </Link>
-  
-          {isAuthenticated ? (
-            <>
-              <Link
-                to="/courses/new"
-                className="ml-3 text-orange-600 hover:underline"
-              >
-                New course
-              </Link>
+        <header className="mb-4 flex flex-row items-center justify-between border-b border-orange-200 pb-3">
+          <div>
+            <Link to="/courses" className="text-orange-600 hover:underline">
+              Home
+            </Link>
 
-              <Link
-                to="/lectures/new"
-                className="ml-3 text-orange-600 hover:underline"
-              >
-                New lecture
-              </Link>
-  
-              <Link
-                to="/profile"
-                className="ml-3 text-orange-600 hover:underline"
-              >
-                Profile
-              </Link>
+            {isAuthenticated && (
+              <>
+                <Link
+                  to="/courses/new"
+                  className="ml-3 text-orange-600 hover:underline"
+                >
+                  New course
+                </Link>
 
-              <Link
-                to="/explore"
-                className="ml-3 text-orange-600 hover:underline"
-              >
-                Explore
-              </Link>
-  
-              <Form method="post" action="/logout" className="ml-auto inline">
+                <Link
+                  to="/lectures/new"
+                  className="ml-3 text-orange-600 hover:underline"
+                >
+                  New lecture
+                </Link>
+
+                <Link
+                  to="/profile"
+                  className="ml-3 text-orange-600 hover:underline"
+                >
+                  Profile
+                </Link>
+
+                <Link
+                  to="/explore"
+                  className="ml-3 text-orange-600 hover:underline"
+                >
+                  Explore
+                </Link>
+              </>
+            )}
+          </div>
+
+         
+          <div>
+            {isAuthenticated ? (
+              <Form method="post" action="/logout" className="inline">
                 <button className="text-orange-600 hover:underline">
                   Logout
                 </button>
               </Form>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/signup"
-                className="ml-3 text-orange-600 hover:underline"
-              >
-                Signup
-              </Link>
-  
-              <Link
-                to="/login"
-                className="ml-3 text-orange-600 hover:underline"
-              >
-                Login
-              </Link>
-            </>
-          )}
+            ) : (
+              <>
+                <Link
+                  to="/signup"
+                  className="text-orange-600 hover:underline"
+                >
+                  Signup
+                </Link>
+
+                <Link to="/login" className="ml-3 text-orange-600 hover:underline">
+                  Login
+                </Link>
+              </>
+            )}
+          </div>
         </header>
         <Outlet />
         <ScrollRestoration />
@@ -111,4 +115,4 @@ export default function App() {
       </body>
     </html>
   );
-          }
+}
