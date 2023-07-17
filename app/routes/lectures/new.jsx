@@ -17,21 +17,22 @@ export async function action({ request }) {
   const form = await request.formData();
   const db = connectDb();
 
-
   try {
     const userId = session.get("userId");
-    const course = await db.models.Course.find({
-      course: form.get("courses"),
+    const courses = await db.models.Course.find({
+      course: form.get("course"),
       user: userId,
     });
     const newLecture = new db.models.Lecture({
       title: form.get("title"),
-      courses: [course._id],
+      courses: courses.map((course) => course._id),
+      teacher: form.get("teacher"),
       description: form.get("description"),
       date: Date(form.get("date")),
       time: Date(form.get("time")),
       user: userId,
     });
+
     await newLecture.save();
 
     return redirect(`/lectures/${newLecture._id}`);
@@ -83,9 +84,33 @@ export default function CreateLecture() {
             Course:
           </label>
 
-          <select id="courses" placeholder="courses" name="courses">
+          <select id="course" placeholder="course" name="course">
             {optionItems}
           </select>
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="teacher" className="block font-semibold">
+            Teacher:
+          </label>
+          <input
+            type="text"
+            name="teacher"
+            id="teacher"
+            placeholder="Teacher"
+            defaultValue={actionData?.values.teacher}
+            className={[
+              "rounded border p-2",
+              actionData?.errors.teacher
+                ? "border-red-500"
+                : "border-orange-200",
+            ].join(" ")}
+          />
+          {actionData?.errors.teacher && (
+            <p className="mt-1 text-red-500">
+              {actionData.errors.teacher.message}
+            </p>
+          )}
         </div>
 
         <div className="mb-4">

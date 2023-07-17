@@ -9,20 +9,32 @@ export async function loader({ params, request }) {
   const courses = await db.models.Course.find({
     user: session.get("userId"),
   });
-  return json(courses);
+  const lecture = await db.models.Lecture.findById(params.lectureId)
+  return json({courses: courses, lecture: lecture});
 }
 
 
 
 
-export default function Editcourse() {
- 
-  const lecture = useLoaderData();
+export default function EditLecture() {
   const actionData = useActionData();
   const loaderData = useLoaderData();
- let optionItems = loaderData.map((course) => (
-    <option key={course._id}>{course.course}</option>
-  ));
+
+  const lecture = loaderData.lecture;
+
+  console.log(lecture);
+
+  let optionItems = loaderData.courses.map((course) => {
+    // TODO
+    let selectedCourse  = lecture.courses.includes( course._id) ? ' selected' : '';
+    console.log(lecture.courses);
+    console.log(lecture.courses.includes( course._id));
+    console.log(selectedCourse);
+   return (
+    <option key={course._id}{...selectedCourse}>{course.course}</option>
+  )
+});
+
 
   
   return (
@@ -38,7 +50,7 @@ export default function Editcourse() {
           name="lecture"
           id="lecture"
           placeholder="Lecture"
-          defaultValue={lecture.lecture ?? actionData?.values.lecture}
+          defaultValue={lecture.title ?? actionData?.values.lecture}
           className={[
             "rounded border p-2",
             actionData?.errors.lecture ? "border-red-500" : "border-orange-200",
@@ -70,7 +82,7 @@ export default function Editcourse() {
           id="description"
           rows="4"
           placeholder="Description"
-          defaultValue={lecture.decription ?? actionData?.values.description}
+          defaultValue={lecture.description ?? actionData?.values.description}
           className={[
             "rounded border p-2",
             actionData?.errors.description ? "border-red-500" : "border-orange-200",
@@ -88,7 +100,7 @@ export default function Editcourse() {
           Date:
         </label>
         <input
-          type="date"
+          type="Date"
           name="date"
           id="date"
           placeholder="Date"
