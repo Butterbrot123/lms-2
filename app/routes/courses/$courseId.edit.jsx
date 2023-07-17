@@ -106,7 +106,7 @@ export default function Editcourse() {
         {actionData?.errors.startdate && (
           <p className="mb-0 mt-1 text-red-500">
             {actionData.errors.startdate.message}
-          </p>
+          </p> 
         )}
 
         <label htmlFor="title" className="mb-1 block font-semibold">
@@ -166,6 +166,26 @@ export default function Editcourse() {
         {actionData?.errors.semester && (
           <p className="mb-0 mt-1 text-red-500">
             {actionData.errors.semester.message}
+          </p>
+        )}
+
+<label htmlFor="teacher" className="mb-1 block font-semibold">
+          Teacher:
+        </label>
+        <input
+          type="text"
+          name="teacher"
+          id="teacher"
+          placeholder="Teacher"
+          defaultValue={course.teacher ?? actionData?.values.teacher}
+          className={[
+            "rounded border border-orange-200  p-2",
+            actionData?.errors.teacher ? "border-2 border-red-500" : "",
+          ].join(" ")}
+        />
+        {actionData?.errors.teacher && (
+          <p className="mb-0 mt-1 text-red-500">
+            {actionData.errors.teacher.message}
           </p>
         )}
 
@@ -234,8 +254,7 @@ export async function action({ request, params }) {
 
   try {
     const course = await db.models.Course.findById(params.courseId);
-    console.log(course);
-    console.log(form.get("description"));
+
     if (!course) {
       return new Response(`Couldn't find course with id ${params.courseId}`, {
         status: 404,
@@ -248,6 +267,7 @@ export async function action({ request, params }) {
     }
     course.course = form.get("course");
     course.education = form.get("education");
+    course.teacher = form.get("teacher");
     course.description = form.get("description");
     course.startdate = Date(form.get("startdate"));
     course.enddate = Date(form.get("enddate"));

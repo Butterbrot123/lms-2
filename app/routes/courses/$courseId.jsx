@@ -26,30 +26,20 @@ export default function CoursePage() {
   return (
     <div>
       <div className="flex flex-row items-center gap-1">
-        <h1 className="mb-4 text-2xl font-bold">{course.course}</h1>
-        <Form method="post">
-          <button name="intent" value="delete" type="submit">
-            Delete
-          </button>
-        </Form>
-        <br></br>
-        <Link
-          to={`/courses/${course._id}/edit`}
-          className="rounded p-2 transition-colors hover:bg-amber-100"
-        >
-          edit
-        </Link>
+        <h1 className="mb-4 text-2xl font-bold">{course.course}</h1>   
       </div>
       <dl className="my-3">
         <dt className="my-1 text-lg font-bold">Education:</dt>
         <dd className="my-2">{course.education}</dd>
         <dt className="my-1 text-lg font-bold">Description:</dt>
         <dd className="my-2 ">{course.description}</dd>
-        <dt className="my-1 text-lg font-bold">Startdate:</dt>
+        <dt className="my-1 text-lg font-bold">Teacher:</dt>
+        <dd className="my-2 ">{course.teacher}</dd>
+        <dt className="my-1 text-lg font-bold">Start Date:</dt>
         <dd className="my-2">{formatDate(course.startdate)}</dd>
-        <dt className="my-1 text-lg font-bold">Enddate:</dt>
+        <dt className="my-1 text-lg font-bold">End Date:</dt>
         <dd className="my-2">{formatDate(course.enddate)}</dd>
-        <dt className="my-1 text-lg font-bold">semester:</dt>
+        <dt className="my-1 text-lg font-bold">Semester:</dt>
         <dd className="my-2">{course.semester}</dd>
         <dt className="my-1 text-lg font-bold">ECTS:</dt>
         <dd className="my-2 ">{course.ects}</dd>
@@ -66,10 +56,29 @@ export default function CoursePage() {
           );
         })}
       </ol>
+      <div className="flex gap-2">
+      <Form method="post">
+          <button
+            name="intent"
+            value="delete"
+            type="submit"
+            className="rounded bg-red-600 text-white px-3 py-2 transition-colors hover:bg-red-700"
+          >
+            Delete
+          </button>
+        </Form>
+        <br></br>
+        <Link
+          to={`/courses/${course._id}/edit`}
+          className="rounded bg-blue-600 text-white px-3 py-2 transition-colors hover:bg-blue-700"
+        >
+          Edit
+        </Link>
     </div>
+    </div>
+    
   );
 }
-
 // Function to format the date
 function formatDate(date) {
   return new Date(date).toLocaleDateString("en-US");
