@@ -89,9 +89,6 @@ function formatTime(time) {
 }
 
 
-//* lecture.courses ? how to show that ? 
-
-
 export function CatchBoundary() {
   const caught = useCatch();
   return (

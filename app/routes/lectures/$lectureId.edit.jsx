@@ -25,7 +25,7 @@ export default function EditLecture() {
   console.log(lecture);
 
   let optionItems = loaderData.courses.map((course) => {
-    // TODO
+  
     let selectedCourse  = lecture.courses.includes( course._id) ? ' selected' : '';
     console.log(lecture.courses);
     console.log(lecture.courses.includes( course._id));
