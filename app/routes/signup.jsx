@@ -9,8 +9,15 @@ export async function action({ request }) {
   const data = Object.fromEntries(formData);
 
   // Check if any required fields are empty
-  const requiredFields = ["username", "emailaddress", "firstName", "lastName", "password", "passwordConfirm"];
-  const emptyFields = requiredFields.filter(field => !data[field]);
+  const requiredFields = [
+    "username",
+    "emailaddress",
+    "firstName",
+    "lastName",
+    "password",
+    "passwordConfirm",
+  ];
+  const emptyFields = requiredFields.filter((field) => !data[field]);
   if (emptyFields.length > 0) {
     return json(
       { errorMessage: "Please fill out all fields", values: data },
@@ -51,7 +58,7 @@ export default function Register() {
     <div>
       {errors && <div>{errors.errorMessage}</div>}
 
-      <h1 className="text-2xl font-bold mb-4">Register</h1>
+      <h1 className="mb-4 text-2xl font-bold">Register</h1>
       <form method="post" action="/signup" className="space-y-4">
         <div>
           <label htmlFor="username" className="block">
@@ -131,7 +138,10 @@ export default function Register() {
           />
         </div>
 
-        <button type="submit" className="bg-blue-500 text-white rounded px-4 py-2">
+        <button
+          type="submit"
+          className="rounded bg-blue-500 px-4 py-2 text-white"
+        >
           Register
         </button>
       </form>

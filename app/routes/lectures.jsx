@@ -4,7 +4,7 @@ import connectDb from "~/db/connectDb.server.js";
 import { requireUserSession } from "~/sessions.server";
 
 export async function loader({ request }) {
- const session = await requireUserSession(request);
+  const session = await requireUserSession(request);
   const db = connectDb();
   const lectures = await db.models.Lecture.find({
     user: session.get("userId"),
@@ -16,18 +16,15 @@ export default function Index() {
   const lectures = useLoaderData();
   const [searchTerm, setSearchTerm] = useState("");
 
+  let filteredLectures = lectures;
+  const sanitizedSearchTerm = searchTerm.toLowerCase().trim();
 
+  if (sanitizedSearchTerm) {
+    filteredLectures = lectures.filter((lecture) => {
+      return lecture.title.toLowerCase().includes(sanitizedSearchTerm);
+    });
+  }
 
-let filteredLectures = lectures
-const sanitizedSearchTerm = searchTerm.toLowerCase().trim()
-
-if (sanitizedSearchTerm) {
-  filteredLectures = lectures.filter(lecture => {
-    return lecture.title.toLowerCase().includes(sanitizedSearchTerm) 
-  })
-}
-
-  
   return (
     <div className="gap-4 md:grid md:grid-cols-2">
       <div className="mb-5 border-orange-200 md:mb-0 md:mr-3 md:border-r md:pr-5">
@@ -38,7 +35,7 @@ if (sanitizedSearchTerm) {
           onChange={(event) => setSearchTerm(event.target.value)}
           placeholder="Filter by Lecture"
           className="mb-3 w-full rounded border border-orange-200 p-2"
-   />
+        />
         <ul className="ml-5 list-disc">
           {filteredLectures.map((lecture) => {
             return (

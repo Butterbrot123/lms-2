@@ -56,7 +56,9 @@ export default function CreateCourse() {
             defaultValue={actionData?.values.course}
             className={[
               "rounded border p-2",
-              actionData?.errors.course ? "border-red-500" : "border-orange-200",
+              actionData?.errors.course
+                ? "border-red-500"
+                : "border-orange-200",
             ].join(" ")}
           />
           {actionData?.errors.course && (
@@ -78,7 +80,9 @@ export default function CreateCourse() {
             defaultValue={actionData?.values.education}
             className={[
               "rounded border p-2",
-              actionData?.errors.education ? "border-red-500" : "border-orange-200",
+              actionData?.errors.education
+                ? "border-red-500"
+                : "border-orange-200",
             ].join(" ")}
           />
           {actionData?.errors.education && (
@@ -100,7 +104,9 @@ export default function CreateCourse() {
             defaultValue={actionData?.values.description}
             className={[
               "rounded border p-2",
-              actionData?.errors.description ? "border-red-500" : "border-orange-200",
+              actionData?.errors.description
+                ? "border-red-500"
+                : "border-orange-200",
             ].join(" ")}
           />
           {actionData?.errors.description && (
@@ -122,7 +128,9 @@ export default function CreateCourse() {
             defaultValue={actionData?.values.startdate}
             className={[
               "rounded border p-2",
-              actionData?.errors.startdate ? "border-red-500" : "border-orange-200",
+              actionData?.errors.startdate
+                ? "border-red-500"
+                : "border-orange-200",
             ].join(" ")}
           />
           {actionData?.errors.startdate && (
@@ -144,7 +152,9 @@ export default function CreateCourse() {
             defaultValue={actionData?.values.enddate}
             className={[
               "rounded border p-2",
-              actionData?.errors.enddate ? "border-red-500" : "border-orange-200",
+              actionData?.errors.enddate
+                ? "border-red-500"
+                : "border-orange-200",
             ].join(" ")}
           />
           {actionData?.errors.enddate && (
@@ -153,7 +163,6 @@ export default function CreateCourse() {
             </p>
           )}
         </div>
-      
 
         <div className="mb-4">
           <label htmlFor="ects" className="block font-semibold">
@@ -189,7 +198,9 @@ export default function CreateCourse() {
             defaultValue={actionData?.values.semester}
             className={[
               "rounded border p-2",
-              actionData?.errors.semester ? "border-red-500" : "border-orange-200",
+              actionData?.errors.semester
+                ? "border-red-500"
+                : "border-orange-200",
             ].join(" ")}
           />
           {actionData?.errors.semester && (
@@ -198,8 +209,8 @@ export default function CreateCourse() {
             </p>
           )}
         </div>
-        
-<label htmlFor="teacher" className="mb-1 block font-semibold">
+
+        <label htmlFor="teacher" className="mb-1 block font-semibold">
           Teacher:
         </label>
         <input
@@ -219,7 +230,6 @@ export default function CreateCourse() {
           </p>
         )}
 
-
         <div className="mb-4">
           <label htmlFor="lecture" className="block font-semibold">
             Lectures:
@@ -232,7 +242,9 @@ export default function CreateCourse() {
             defaultValue={actionData?.values.lecture}
             className={[
               "rounded border p-2",
-              actionData?.errors.lecture ? "border-red-500" : "border-orange-200",
+              actionData?.errors.lecture
+                ? "border-red-500"
+                : "border-orange-200",
             ].join(" ")}
           />
           {actionData?.errors.lecture && (

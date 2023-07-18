@@ -37,7 +37,6 @@ const teacherSchema = new Schema({
     trim: true,
     minLength: [3, "That's too short"],
   },
-  
 
   courses: {
     type: [mongoose.Schema.Types.ObjectId],
@@ -66,7 +65,7 @@ const courseSchema = new Schema({
     minLength: [2, "That's too short"],
   },
 
- /* CourseDates: {
+  /* CourseDates: {
     type: {
       start: {
         type: Date,
@@ -169,8 +168,6 @@ const lectureSchema = new Schema(
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Course",
     },
-
-    
   },
   { timestamps: true }
 );

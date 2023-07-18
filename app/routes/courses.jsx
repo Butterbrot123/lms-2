@@ -4,7 +4,7 @@ import connectDb from "~/db/connectDb.server.js";
 import { requireUserSession } from "~/sessions.server";
 
 export async function loader({ request }) {
- const session = await requireUserSession(request);
+  const session = await requireUserSession(request);
   const db = connectDb();
   const courses = await db.models.Course.find({
     user: session.get("userId"),
@@ -16,18 +16,15 @@ export default function Index() {
   const courses = useLoaderData();
   const [searchTerm, setSearchTerm] = useState("");
 
+  let filteredCourses = courses;
+  const sanitizedSearchTerm = searchTerm.toLowerCase().trim();
 
+  if (sanitizedSearchTerm) {
+    filteredCourses = courses.filter((course) => {
+      return course.course.toLowerCase().includes(sanitizedSearchTerm);
+    });
+  }
 
-let filteredCourses = courses
-const sanitizedSearchTerm = searchTerm.toLowerCase().trim()
-
-if (sanitizedSearchTerm) {
-  filteredCourses = courses.filter(course => {
-    return course.course.toLowerCase().includes(sanitizedSearchTerm) 
-  })
-}
-
-  
   return (
     <div className="gap-4 md:grid md:grid-cols-2">
       <div className="mb-5 border-orange-200 md:mb-0 md:mr-3 md:border-r md:pr-5">
@@ -39,7 +36,7 @@ if (sanitizedSearchTerm) {
           placeholder="Filter by Course"
           className="mb-3 w-full rounded border border-orange-200 p-2"
         />
-        
+
         <ul className="ml-5 list-disc">
           {filteredCourses.map((course) => {
             return (

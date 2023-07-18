@@ -1,10 +1,8 @@
 import { json } from "@remix-run/node";
 import { useLoaderData, Form, Link } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server.js";
-import { useState, MenuItem } from "react";
+import { useState } from "react";
 import { requireUserSession } from "~/sessions.server";
-
-
 
 export async function loader({ request }) {
   const session = await requireUserSession(request);
@@ -15,18 +13,15 @@ export async function loader({ request }) {
   return json(courses);
 }
 
-export default function ExplorePage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState("");
+export default function Index() {
   const courses = useLoaderData();
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSemester, setSelectedSemester] = useState(0);
+
   let filteredCourses = courses;
 
-  const handleChange = (event) => {
-    console.log(event.target.value)
-    setSelectedCourse(event.target.value);
-  };
-
-  const sanitizedSearchTerm = searchTerm.toLowerCase().trim();
+  const sanitizedSearchTerm = searchTerm?.toLowerCase()?.trim() ?? "";
   if (sanitizedSearchTerm) {
     filteredCourses = courses.filter((course) => {
       return (
@@ -35,58 +30,58 @@ export default function ExplorePage() {
       );
     });
   }
-  
-  /*
-  if (selectedCourse !== "All" && selectedCourse.length !== 0) {
-    console.log(selectedCourse + 'helooo')
-    console.log(filteredCourses)
+
+  if (selectedSemester !== 0) {
     filteredCourses = filteredCourses.filter((course) => {
-      return course.course.toLowerCase() === selectedCourse.toLowerCase();
+      return course.semester == selectedSemester;
     });
-    console.log(filteredCourses)
   }
-  */
+
+  // TODO
+  let uni =  [...new Set(courses)]
+  console.log(uni)
 
   let optionItems = courses.map((course) => {
-    //let selectedCourse  = lecture.courses.includes( course._id) ? ' selected' : '';
+    let _selectedSemester =
+      course.semester === selectedSemester ? " selected" : "";
     return (
-      <option key={course._id}>{course.semester}</option>
-    )
-    })
-  // https://stackoverflow.com/questions/68563765/how-to-display-data-from-the-database-in-select-option
-
-
+      <option key={course._id} {..._selectedSemester}>
+        {course.semester}
+      </option>
+    );
+  });
 
   return (
     <main className="flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-8">Explore all our courses</h1>
-      <div className="flex justify-center mb-6 space-x-4">
+      <h1 className="mb-8 text-4xl font-bold">Explore all our courses</h1>
+      <div className="mb-6 flex justify-center space-x-4">
         <input
           type="search"
           placeholder="Search for a course"
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
-          className="w-64 px-3 py-2 mb-6 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="mb-6 w-64 rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        </div>
+      </div>
 
-        
-     
-<div className="mb-4">
-          <label htmlFor="semester" className="block font-semibold">
-            Semester:
-          </label>
+      <div className="mb-4">
+        <label htmlFor="semester" className="block font-semibold">
+          Semester:
+        </label>
 
-<select id="semester" placeholder="Semester" name="Semester">
-            {optionItems}
-          </select>
-      
-    
+        <select
+          id="semester"
+          placeholder="Semester"
+          name="Semester"
+          onChange={(event) => setSelectedSemester(event.target.value)}
+        >
+          {optionItems}
+        </select>
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
         {filteredCourses.map((course) => (
-          <div key={course._id} className="rounded-md bg-white shadow-lg p-6">
+          <div key={course._id} className="rounded-md bg-white p-6 shadow-lg">
             <h2 className="mb-2 text-lg font-bold text-blue-600">
               {course.course}
             </h2>
@@ -119,17 +114,17 @@ export default function ExplorePage() {
               {course.teacher}
             </p>
 
-            <div className="flex space-x-2 mt-4">
+            <div className="mt-4 flex space-x-2">
               <Link
                 to={`/courses/${course._id}/edit`}
-                className="rounded bg-blue-600 text-white px-3 py-2"
+                className="rounded bg-blue-600 px-3 py-2 text-white"
               >
                 Edit
               </Link>
               <Form method="delete" action={`/courses/${course._id}`}>
                 <button
                   type="submit"
-                  className="rounded bg-red-600 text-white px-3 py-2"
+                  className="rounded bg-red-600 px-3 py-2 text-white"
                 >
                   Delete
                 </button>

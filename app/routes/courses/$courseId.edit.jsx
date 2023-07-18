@@ -106,7 +106,7 @@ export default function Editcourse() {
         {actionData?.errors.startdate && (
           <p className="mb-0 mt-1 text-red-500">
             {actionData.errors.startdate.message}
-          </p> 
+          </p>
         )}
 
         <label htmlFor="title" className="mb-1 block font-semibold">
@@ -169,7 +169,7 @@ export default function Editcourse() {
           </p>
         )}
 
-<label htmlFor="teacher" className="mb-1 block font-semibold">
+        <label htmlFor="teacher" className="mb-1 block font-semibold">
           Teacher:
         </label>
         <input

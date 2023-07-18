@@ -44,8 +44,8 @@ export default function Login() {
             placeholder="Username"
             defaultValue={actionData?.values?.username}
           />
-           <Label htmlFor="emailaddress">Email-Address</Label>
-           <Input
+          <Label htmlFor="emailaddress">Email-Address</Label>
+          <Input
             type="text"
             name="emailaddress"
             id="emailaddress"
@@ -77,9 +77,8 @@ export async function action({ request }) {
 
   const user = await db.models.Teacher.findOne({
     username: formData.get("username").trim(),
-    
   });
- //  console.log(user);
+  //  console.log(user);
   if (!user) {
     return json(
       // Also return values so we can pre-populate the form
@@ -87,7 +86,7 @@ export async function action({ request }) {
       { status: 404 }
     );
   }
-  
+
   const passwordIsValid = await bcrypt.compare(
     formData.get("password").trim(),
     user.password

@@ -26,7 +26,7 @@ export default function CoursePage() {
   return (
     <div>
       <div className="flex flex-row items-center gap-1">
-        <h1 className="mb-4 text-2xl font-bold">{course.course}</h1>   
+        <h1 className="mb-4 text-2xl font-bold">{course.course}</h1>
       </div>
       <dl className="my-3">
         <dt className="my-1 text-lg font-bold">Education:</dt>
@@ -57,12 +57,12 @@ export default function CoursePage() {
         })}
       </ol>
       <div className="flex gap-2">
-      <Form method="post">
+        <Form method="post">
           <button
             name="intent"
             value="delete"
             type="submit"
-            className="rounded bg-red-600 text-white px-3 py-2 transition-colors hover:bg-red-700"
+            className="rounded bg-red-600 px-3 py-2 text-white transition-colors hover:bg-red-700"
           >
             Delete
           </button>
@@ -70,13 +70,12 @@ export default function CoursePage() {
         <br></br>
         <Link
           to={`/courses/${course._id}/edit`}
-          className="rounded bg-blue-600 text-white px-3 py-2 transition-colors hover:bg-blue-700"
+          className="rounded bg-blue-600 px-3 py-2 text-white transition-colors hover:bg-blue-700"
         >
           Edit
         </Link>
+      </div>
     </div>
-    </div>
-    
   );
 }
 // Function to format the date

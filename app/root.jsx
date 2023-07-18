@@ -84,7 +84,6 @@ export default function App() {
             )}
           </div>
 
-         
           <div>
             {isAuthenticated ? (
               <Form method="post" action="/logout" className="inline">
@@ -94,14 +93,14 @@ export default function App() {
               </Form>
             ) : (
               <>
-                <Link
-                  to="/signup"
-                  className="text-orange-600 hover:underline"
-                >
+                <Link to="/signup" className="text-orange-600 hover:underline">
                   Signup
                 </Link>
 
-                <Link to="/login" className="ml-3 text-orange-600 hover:underline">
+                <Link
+                  to="/login"
+                  className="ml-3 text-orange-600 hover:underline"
+                >
                   Login
                 </Link>
               </>

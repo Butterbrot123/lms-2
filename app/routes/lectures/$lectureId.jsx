@@ -8,9 +8,12 @@ export async function loader({ params, request }) {
   const db = connectDb();
   const lecture = await db.models.Lecture.findById(params.lectureId);
 
-  const courses = await db.models.Course.findOne().where('_id').in(lecture.courses).exec();
+  const courses = await db.models.Course.findOne()
+    .where("_id")
+    .in(lecture.courses)
+    .exec();
 
-  console.log(courses)
+  console.log(courses);
 
   if (!lecture) {
     throw new Response(`Couldn't find Lecture with id ${params.lectureId}`, {
@@ -23,7 +26,7 @@ export async function loader({ params, request }) {
       status: 403,
     });
   }
-  return json({lecture: lecture, course: courses});
+  return json({ lecture: lecture, course: courses });
 }
 
 export default function LecturePage() {
@@ -31,15 +34,14 @@ export default function LecturePage() {
   const lecture = loaderData.lecture;
   const course = loaderData.course;
 
-  console.log(course)
-  
+  console.log(course);
+
   return (
     <div>
       <div className="flex flex-row items-center gap-1">
         <h1 className="mb-4 text-2xl font-bold">{lecture.lecture}</h1>
       </div>
       <dl className="my-3">
-      
         <dd className="my-2 text-2xl font-bold ">{lecture.title}</dd>
         <dt className="my-1 text-lg font-bold">Course:</dt>
         <dd className="my-2 ">{course.course}</dd>
@@ -53,12 +55,12 @@ export default function LecturePage() {
         <dd clasName="my-2">{formatTime(lecture.time)}</dd>
       </dl>
       <div className="flex gap-2">
-      <Form method="post">
-        <button
+        <Form method="post">
+          <button
             name="intent"
             value="delete"
             type="submit"
-            className="rounded bg-red-600 text-white px-3 py-2 transition-colors hover:bg-red-700"
+            className="rounded bg-red-600 px-3 py-2 text-white transition-colors hover:bg-red-700"
           >
             Delete
           </button>
@@ -66,11 +68,11 @@ export default function LecturePage() {
         <br></br>
         <Link
           to={`/lectures/${lecture._id}/edit`}
-          className="rounded bg-blue-600 text-white px-3 py-2 transition-colors hover:bg-blue-700"
+          className="rounded bg-blue-600 px-3 py-2 text-white transition-colors hover:bg-blue-700"
         >
           Edit
         </Link>
-    </div>
+      </div>
     </div>
   );
 }
@@ -87,7 +89,6 @@ function formatTime(time) {
     hour12: true,
   });
 }
-
 
 export function CatchBoundary() {
   const caught = useCatch();

@@ -18,7 +18,6 @@ export async function loader({ params, request }) {
   }
 
   if (!teacher) {
-    // TODO: change
     throw new Response(`Couldn't find Course with id ${params.courseId}`, {
       status: 404,
       statusText: "Not Found",
@@ -45,27 +44,28 @@ export default function Index() {
   );
 
   return (
-    <div className="flex flex-col items-center justify-center  min-h-screen ">
-    <div className="w-full max-w-xl mt-8 bg-gray-50 p-8 rounded-lg shadow-md">
-    <h1 className="mb-4 text-3xl lg:text-4xl font-bold">
-      Hello, <span className="text-gray-900">{username}</span>! Welcome to your profile.
-    </h1>
+    <div className="flex min-h-screen flex-col items-center  justify-center ">
+      <div className="mt-8 w-full max-w-xl rounded-lg bg-gray-50 p-8 shadow-md">
+        <h1 className="mb-4 text-3xl font-bold lg:text-4xl">
+          Hello, <span className="text-gray-900">{username}</span>! Welcome to
+          your profile.
+        </h1>
         <div className="mb-4">
-          <span className="font-bold text-lg text-gray-900">Email:</span>{" "}
+          <span className="text-lg font-bold text-gray-900">Email:</span>{" "}
           {email}
         </div>
         <div className="mb-4">
-          <span className="font-bold text-lg text-gray-900">First Name:</span>{" "}
+          <span className="text-lg font-bold text-gray-900">First Name:</span>{" "}
           {firstName}
         </div>
         <div className="mb-4">
-          <span className="font-bold text-lg text-gray-900">Last Name:</span>{" "}
+          <span className="text-lg font-bold text-gray-900">Last Name:</span>{" "}
           {lastName}
         </div>
         <br></br>
         <br></br>
         <div className="mb-4">
-          <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-gray-900 lg:text-3xl">
             Your Courses:
           </h2>
           <br />
@@ -73,9 +73,9 @@ export default function Index() {
           {sortedCourses.map((course) => (
             <div
               key={course._id}
-              className="mb-4 p-4 bg-white rounded-md shadow-md"
+              className="mb-4 rounded-md bg-white p-4 shadow-md"
             >
-              <h1 className="mb-2 text-xl lg:text-2xl font-bold text-gray-800">
+              <h1 className="mb-2 text-xl font-bold text-gray-800 lg:text-2xl">
                 <span className="text-blue-600">Course:</span> {course.course}
               </h1>
               <p className="mb-2 text-gray-900">
@@ -83,10 +83,12 @@ export default function Index() {
                 {course.description}
               </p>
               <p className="mb-2 text-gray-900">
-                <span className="font-bold">Start Date:</span> {formatDate(course.startdate)}
+                <span className="font-bold">Start Date:</span>{" "}
+                {formatDate(course.startdate)}
               </p>
               <p className="mb-2 text-gray-900">
-                <span className="font-bold">End Date:</span> {formatDate(course.enddate)}
+                <span className="font-bold">End Date:</span>{" "}
+                {formatDate(course.enddate)}
               </p>
               <p className="mb-2 text-gray-900">
                 <span className="font-bold">ECTS:</span> {course.ects}
@@ -105,14 +107,14 @@ export default function Index() {
                 <br />
                 <Link
                   to={`/courses/${course._id}/edit`}
-                  className="rounded bg-blue-600 text-white px-3 py-2"
+                  className="rounded bg-blue-600 px-3 py-2 text-white"
                 >
                   Edit
                 </Link>
                 <Form method="delete" action={`/courses/${course._id}`}>
                   <button
                     type="submit"
-                    className="rounded bg-red-600 text-white px-3 py-2"
+                    className="rounded bg-red-600 px-3 py-2 text-white"
                   >
                     Delete
                   </button>
