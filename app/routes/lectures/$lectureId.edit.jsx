@@ -14,21 +14,15 @@ export async function loader({ params, request }) {
 }
 
 
-
-
 export default function EditLecture() {
   const actionData = useActionData();
   const loaderData = useLoaderData();
    const lecture = loaderData.lecture;
 
- // console.log(lecture);
 
   let optionItems = loaderData.courses.map((course) => {
-  
-    let selectedCourse  = lecture.courses.includes( course._id) ? ' selected' : '';
-   // console.log(lecture.courses);
-   // console.log(lecture.courses.includes( course._id));
-  //  console.log(selectedCourse);
+  let selectedCourse  = lecture.courses.includes( course._id) ? ' selected' : '';
+
    return (
     <option key={course._id}{...selectedCourse}>{course.course}</option>
   )

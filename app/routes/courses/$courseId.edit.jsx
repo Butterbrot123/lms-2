@@ -19,11 +19,19 @@ export async function loader({ params, request }) {
     });
   }
   return json(course);
+
 }
+
+
 
 export default function Editcourse() {
   const course = useLoaderData();
   const actionData = useActionData();
+
+  console.log(course)
+
+console.log(actionData)
+  
   return (
     <div>
       <h1 className="mb-4 text-2xl font-bold">Edit Course</h1>
@@ -92,7 +100,7 @@ export default function Editcourse() {
           Startdate:
         </label>
         <input
-          type="Date"
+          type="date"
           name="startdate"
           id="startdate"
           placeholder="Startdate"
@@ -113,8 +121,8 @@ export default function Editcourse() {
           Enddate:
         </label>
         <input
-          type="Date"
-          name="Enddate"
+          type="date"
+          name="enddate"
           id="enddate"
           placeholder="Enddate"
           // TODO: date not showing
@@ -189,29 +197,7 @@ export default function Editcourse() {
           </p>
         )}
 
-        <label htmlFor="lecture" className="mb-1 block font-semibold">
-          Lectures:
-        </label>
-        <textarea
-          name="lecture"
-          id="lecture"
-          rows="10"
-          placeholder="Lectures (one per line)"
-          defaultValue={
-            // TODO: remove commas in the split function
-            course.lecture?.split(",")?.map((lecture) => lecture + "\n") ??
-            actionData?.values.lecture
-          }
-          className={[
-            "rounded border border-orange-200  p-2",
-            actionData?.errors.lectures ? "border-2 border-red-500" : "",
-          ].join(" ")}
-        />
-        {actionData?.errors.lecturse && (
-          <p className="mb-0 mt-1 text-red-500">
-            {actionData.errors.lectures.message}
-          </p>
-        )}
+      
         <br />
         <button
           type="submit"
@@ -273,7 +259,6 @@ export async function action({ request, params }) {
     course.enddate = Date(form.get("enddate"));
     course.ects = Number(form.get("ects"));
     course.semester = Number(form.get("semester"));
-    course.lecture = form.get("lecture").split("\n").toString();
 
     await course.save();
     return redirect(`/courses/${course._id}`);

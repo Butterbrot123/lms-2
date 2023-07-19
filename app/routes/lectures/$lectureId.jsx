@@ -8,13 +8,11 @@ export async function loader({ params, request }) {
   const db = connectDb();
   const lecture = await db.models.Lecture.findById(params.lectureId);
 
-  const courses = await db.models.Course.findOne()
+  const courses = await db.models.Course.find()
     .where("_id")
     .in(lecture.courses)
     .exec();
-
-  console.log(courses);
-
+  
   if (!lecture) {
     throw new Response(`Couldn't find Lecture with id ${params.lectureId}`, {
       status: 404,
@@ -26,7 +24,7 @@ export async function loader({ params, request }) {
       status: 403,
     });
   }
-  return json({ lecture: lecture, course: courses });
+  return json({ lecture: lecture, course: courses[0] });
 }
 
 export default function LecturePage() {
@@ -44,7 +42,7 @@ export default function LecturePage() {
       <dl className="my-3">
         <dd className="my-2 text-2xl font-bold ">{lecture.title}</dd>
         <dt className="my-1 text-lg font-bold">Course:</dt>
-        <dd className="my-2 ">{course.course}</dd>
+        <dd className="my-2 ">{course?.course ?? 'Unknown course'}</dd>
         <dt className="my-1 text-lg font-bold">Teacher:</dt>
         <dd className="my-2 ">{lecture.teacher}</dd>
         <dt className="my-1 text-lg font-bold">Description:</dt>

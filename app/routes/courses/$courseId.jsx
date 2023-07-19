@@ -21,8 +21,11 @@ export async function loader({ params, request }) {
   return json(course);
 }
 
+
+
 export default function CoursePage() {
   const course = useLoaderData();
+ 
   return (
     <div>
       <div className="flex flex-row items-center gap-1">
@@ -44,18 +47,7 @@ export default function CoursePage() {
         <dt className="my-1 text-lg font-bold">ECTS:</dt>
         <dd className="my-2 ">{course.ects}</dd>
       </dl>
-      <h2 className="my-3 border-t border-orange-200 pt-3 text-xl font-bold">
-        Lectures
-      </h2>
-      <ol className="ml-5 list-decimal">
-        {course.lecture?.split(",")?.map((lecture) => {
-          return (
-            <li key={lecture} className="my-2">
-              {lecture}
-            </li>
-          );
-        })}
-      </ol>
+    
       <div className="flex gap-2">
         <Form method="post">
           <button

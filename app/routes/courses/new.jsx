@@ -22,7 +22,6 @@ export async function action({ request }) {
       enddate: Date(form.get("enddate")),
       ects: Number(form.get("ects")),
       semester: Number(form.get("semester")),
-      lectures: form.get("lecture").split("\n"),
       user: session.get("userId"),
     });
     await newCourse.save();
@@ -118,13 +117,13 @@ export default function CreateCourse() {
 
         <div className="mb-4">
           <label htmlFor="startdate" className="block font-semibold">
-            Start Date:
+            Startdate:
           </label>
           <input
             type="date"
             name="startdate"
             id="startdate"
-            placeholder="Start Date"
+            placeholder="Startdate"
             defaultValue={actionData?.values.startdate}
             className={[
               "rounded border p-2",
@@ -142,7 +141,7 @@ export default function CreateCourse() {
 
         <div className="mb-4">
           <label htmlFor="enddate" className="block font-semibold">
-            End Date:
+            Enddate:
           </label>
           <input
             type="date"
@@ -230,29 +229,7 @@ export default function CreateCourse() {
           </p>
         )}
 
-        <div className="mb-4">
-          <label htmlFor="lecture" className="block font-semibold">
-            Lectures:
-          </label>
-          <textarea
-            name="lecture"
-            id="lecture"
-            rows="10"
-            placeholder="Lectures (one per line)"
-            defaultValue={actionData?.values.lecture}
-            className={[
-              "rounded border p-2",
-              actionData?.errors.lecture
-                ? "border-red-500"
-                : "border-orange-200",
-            ].join(" ")}
-          />
-          {actionData?.errors.lecture && (
-            <p className="mt-1 text-red-500">
-              {actionData.errors.lecture.message}
-            </p>
-          )}
-        </div>
+      
 
         <button
           type="submit"
