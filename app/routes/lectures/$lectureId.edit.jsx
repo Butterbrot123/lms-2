@@ -186,8 +186,8 @@ export async function action({ request, params }) {
     }
     lecture.courses = form.get("courses");
     lecture.title = form.get("title");
-    lecture.date = Date(form.get("date"));
-    lecture.time = Date(form.get("time"));
+    lecture.date = form.get("date");
+    lecture.time = form.get("time");
     lecture.description = (form.get("description"));
    
     await lecture.save();

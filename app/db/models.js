@@ -65,37 +65,6 @@ const courseSchema = new Schema({
     minLength: [2, "That's too short"],
   },
 
-  /* CourseDates: {
-    type: {
-      start: {
-        type: Date,
-        required: [
-          function () {
-            return this.searching;
-          },
-          "You need to provide a start date if you are creating a Course",
-        ],
-      },
-      end: {
-        type: Date,
-        required: [
-          function () {
-            return this.searching;
-          },
-          "You need to provide an end date if you are creating a course",
-        ],
-        validate: {
-          validator: function (value) {
-            return value >= this.start;
-          },
-          message: "End date must be after or equal to start date.",
-        },
-      },
-      searching: { type: Boolean, required: true },
-    },
-  },
-
-  */
 
   startdate: {
     type: Date,

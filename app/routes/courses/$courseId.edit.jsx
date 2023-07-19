@@ -2,6 +2,7 @@ import { Form, useActionData, useLoaderData, useCatch } from "@remix-run/react";
 import { redirect, json } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server.js";
 import { requireUserSession } from "~/sessions.server";
+import {format } from "date-fns"; 
 
 export async function loader({ params, request }) {
   const session = await requireUserSession(request);
@@ -19,19 +20,15 @@ export async function loader({ params, request }) {
     });
   }
   return json(course);
-
 }
-
 
 
 export default function Editcourse() {
   const course = useLoaderData();
   const actionData = useActionData();
 
-  console.log(course)
 
-console.log(actionData)
-  
+
   return (
     <div>
       <h1 className="mb-4 text-2xl font-bold">Edit Course</h1>
@@ -104,8 +101,11 @@ console.log(actionData)
           name="startdate"
           id="startdate"
           placeholder="Startdate"
-          // TODO: date not showing
-          defaultValue={course.startdate ?? actionData?.values.startdate}
+          defaultValue={
+            actionData?.values.startdate ?? course.startdate
+              ? format(new Date(course.startdate), "yyyy-MM-dd")
+              : ""
+          }
           className={[
             "rounded border border-orange-200  p-2",
             actionData?.errors.startdate ? "border-2 border-red-500" : "",
@@ -125,8 +125,11 @@ console.log(actionData)
           name="enddate"
           id="enddate"
           placeholder="Enddate"
-          // TODO: date not showing
-          defaultValue={course.enddate ?? actionData?.values.enddate}
+          defaultValue={
+            actionData?.values.enddate ?? course.enddate
+              ? format(new Date(course.enddate), "yyyy-MM-dd")
+              : ""
+          }
           className={[
             "rounded border border-orange-200  p-2",
             actionData?.errors.enddate ? "border-2 border-red-500" : "",
@@ -210,6 +213,8 @@ console.log(actionData)
   );
 }
 
+
+
 export function CatchBoundary() {
   const caught = useCatch();
   return (
@@ -251,14 +256,17 @@ export async function action({ request, params }) {
         status: 403,
       });
     }
+
     course.course = form.get("course");
     course.education = form.get("education");
     course.teacher = form.get("teacher");
     course.description = form.get("description");
-    course.startdate = Date(form.get("startdate"));
-    course.enddate = Date(form.get("enddate"));
+    course.startdate = form.get("startdate");
+    course.enddate =  form.get("enddate");
     course.ects = Number(form.get("ects"));
     course.semester = Number(form.get("semester"));
+
+
 
     await course.save();
     return redirect(`/courses/${course._id}`);

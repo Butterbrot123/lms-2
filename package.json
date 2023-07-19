@@ -17,6 +17,7 @@
     "@remix-run/serve": "1.14.3",
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
+    "date-fns": "^2.30.0",
     "isbot": "3.6.8",
     "moment": "^2.29.4",
     "mongoose": "7.2.1",
