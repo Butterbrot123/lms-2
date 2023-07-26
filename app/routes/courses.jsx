@@ -16,9 +16,12 @@ export default function Index() {
   const courses = useLoaderData();
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Create a copy of the 'courses' array to hold filtered courses
   let filteredCourses = courses;
+  // Sanitize the search term by converting to lowercase and removing extra spaces
   const sanitizedSearchTerm = searchTerm.toLowerCase().trim();
 
+  // Filtering the courses based on the search term
   if (sanitizedSearchTerm) {
     filteredCourses = courses.filter((course) => {
       return course.course.toLowerCase().includes(sanitizedSearchTerm);
@@ -27,14 +30,16 @@ export default function Index() {
 
   return (
     <div className="gap-4 md:grid md:grid-cols-2">
-      <div className="mb-5 border-orange-200 md:mb-0 md:mr-3 md:border-r md:pr-5">
-        <h1 className="mb-4 text-2xl font-bold">My favorite Courses</h1>
+      <div className="mb-5 border-blue-200 md:mb-0 md:mr-3 md:border-r md:pr-5">
+        <h1 className="mb-4 text-2xl font-bold text-blue-500">
+          My favorite Courses
+        </h1>
         <input
           type="search"
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
           placeholder="Filter by Course"
-          className="mb-3 w-full rounded border border-orange-200 p-2"
+          className="border-grey-200 mb-3 w-full rounded border p-2"
         />
 
         <ul className="ml-5 list-disc">
@@ -43,7 +48,7 @@ export default function Index() {
               <li key={course._id}>
                 <Link
                   to={`/courses/${course._id}`}
-                  className="text-orange-600 hover:underline"
+                  className="text-grey-400 hover:underline"
                 >
                   {course.course}
                 </Link>

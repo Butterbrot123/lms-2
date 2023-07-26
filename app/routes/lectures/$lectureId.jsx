@@ -8,22 +8,26 @@ export async function loader({ params, request }) {
   const db = connectDb();
   const lecture = await db.models.Lecture.findById(params.lectureId);
 
+   // Find the courses associated with the lecture using the lecture.courses array. 
   const courses = await db.models.Course.find()
     .where("_id")
     .in(lecture.courses)
     .exec();
   
+     // Checking if the lecture is found
   if (!lecture) {
     throw new Response(`Couldn't find Lecture with id ${params.lectureId}`, {
       status: 404,
       statusText: "Not Found",
     });
   }
+    // Checking if the user has permission to view the lecture
   if (lecture.user.toString() !== session.get("userId")) {
     throw new Response(`You don't have permission to view this lecture`, {
       status: 403,
     });
   }
+    // Returning the lecture and related course data as JSON
   return json({ lecture: lecture, course: courses[0] });
 }
 
@@ -115,6 +119,7 @@ export async function action({ request, params }) {
   const session = await requireUserSession(request);
   const formData = await request.formData();
   const db = connectDb();
+   // Checking if the user has permission to delete the lecture
   const lecture = await db.models.Lecture.findById(params.lectureId);
   if (
     formData.get("intent") === "delete" &&

@@ -6,9 +6,11 @@ import { requireUserSession } from "~/sessions.server";
 export async function loader({ params, request }) {
   const session = await requireUserSession(request);
   const db = connectDb();
+  // It fetches the course data from the database based on the courseId.
   const course = await db.models.Course.findById(params.courseId);
   if (!course) {
     throw new Response(`Couldn't find Course with id ${params.courseId}`, {
+      // Checking if the course is found and if the user has permission to view it
       status: 404,
       statusText: "Not Found",
     });
@@ -21,11 +23,9 @@ export async function loader({ params, request }) {
   return json(course);
 }
 
-
-
 export default function CoursePage() {
   const course = useLoaderData();
- 
+
   return (
     <div>
       <div className="flex flex-row items-center gap-1">
@@ -47,7 +47,7 @@ export default function CoursePage() {
         <dt className="my-1 text-lg font-bold">ECTS:</dt>
         <dd className="my-2 ">{course.ects}</dd>
       </dl>
-    
+
       <div className="flex gap-2">
         <Form method="post">
           <button
@@ -75,6 +75,7 @@ function formatDate(date) {
   return new Date(date).toLocaleDateString("en-US");
 }
 
+// Error handeling
 export function CatchBoundary() {
   const caught = useCatch();
   return (
@@ -97,7 +98,8 @@ export function ErrorBoundary({ error }) {
     </div>
   );
 }
-
+// It requires 'request' and 'params' objects to access form data and the courseId
+// It also checks if the user has permission to delete the course.
 export async function action({ request, params }) {
   const session = await requireUserSession(request);
   const formData = await request.formData();

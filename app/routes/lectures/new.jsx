@@ -19,10 +19,12 @@ export async function action({ request }) {
 
   try {
     const userId = session.get("userId");
+    // Find courses associated with the user based on the selected course in the form.
     const courses = await db.models.Course.find({
       course: form.get("course"),
       user: userId,
     });
+    // Creating a new lecture object with the form data
     const newLecture = new db.models.Lecture({
       title: form.get("title"),
       courses: courses.map((course) => course._id),
@@ -33,11 +35,13 @@ export async function action({ request }) {
       user: userId,
     });
 
+    // Saving the new lecture to the database
     await newLecture.save();
 
     return redirect(`/lectures/${newLecture._id}`);
   } catch (error) {
     return json(
+      //Error handeling
       { errors: error.errors, values: Object.fromEntries(form) },
       { status: 400 }
     );
@@ -47,13 +51,14 @@ export async function action({ request }) {
 export default function CreateLecture() {
   const actionData = useActionData();
   const loaderData = useLoaderData();
+  // Creating an array of option items for the course dropdown
   let optionItems = loaderData.map((course) => (
     <option key={course._id}>{course.course}</option>
   ));
 
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-bold">Create Lecture</h1>
+      <h1 className="mb-4 text-2xl font-bold text-blue-500">Create Lecture</h1>
       <Form method="post">
         <div className="mb-4">
           <label htmlFor="course" className="block font-semibold">
@@ -68,8 +73,8 @@ export default function CreateLecture() {
             className={[
               "rounded border p-2",
               actionData?.errors.lecture
-                ? "border-red-500"
-                : "border-orange-200",
+                ? "border-gray-500"
+                : "border-gray-200",
             ].join(" ")}
           />
           {actionData?.errors.lecture && (
@@ -102,8 +107,8 @@ export default function CreateLecture() {
             className={[
               "rounded border p-2",
               actionData?.errors.teacher
-                ? "border-red-500"
-                : "border-orange-200",
+                ? "border-gray-500"
+                : "border-gray-200",
             ].join(" ")}
           />
           {actionData?.errors.teacher && (
@@ -126,8 +131,8 @@ export default function CreateLecture() {
             className={[
               "rounded border p-2",
               actionData?.errors.description
-                ? "border-red-500"
-                : "border-orange-200",
+                ? "border-gray-500"
+                : "border-gray-200",
             ].join(" ")}
           />
           {actionData?.errors.description && (
@@ -149,7 +154,7 @@ export default function CreateLecture() {
             defaultValue={actionData?.values.date}
             className={[
               "rounded border p-2",
-              actionData?.errors.date ? "border-red-500" : "border-orange-200",
+              actionData?.errors.date ? "border-gray-500" : "border-gray-200",
             ].join(" ")}
           />
           {actionData?.errors.date && (
@@ -171,7 +176,7 @@ export default function CreateLecture() {
             defaultValue={actionData?.values.time}
             className={[
               "rounded border p-2",
-              actionData?.errors.time ? "border-red-500" : "border-orange-200",
+              actionData?.errors.time ? "border-gray-500" : "border-gray-200",
             ].join(" ")}
           />
           {actionData?.errors.time && (
@@ -183,7 +188,7 @@ export default function CreateLecture() {
 
         <button
           type="submit"
-          className="rounded bg-orange-600 p-2 text-white transition-colors hover:bg-orange-700"
+          className="rounded bg-blue-500 p-2 text-white transition-colors hover:bg-blue-500"
         >
           Save
         </button>

@@ -1,6 +1,7 @@
 import { mongoose } from "mongoose";
 const { Schema } = mongoose;
 
+// Define the schema for the Teacher model.
 const teacherSchema = new Schema({
   username: {
     type: String,
@@ -38,14 +39,14 @@ const teacherSchema = new Schema({
     minLength: [3, "That's too short"],
   },
 
+  // Array of courses taught by the teacher.
   courses: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Course",
   },
 });
 
-// course contains 1 or many lectures as embedded documents
-
+// Define the schema for the Course model.
 const courseSchema = new Schema({
   course: {
     type: String,
@@ -84,6 +85,7 @@ const courseSchema = new Schema({
     type: Number,
     required: true,
   },
+    // Reference to the teacher who created the course.
   user: {
     type: Schema.Types.ObjectId,
     ref: "Teacher",
@@ -97,13 +99,15 @@ const courseSchema = new Schema({
       "Description is too long. Maximum allowed is 280 characters.",
     ],
   },
+    // Reference to the lecture associated with the course.
   lecture: {
-    type: String, //Schema.Types.ObjectId,
+    type: String,
     ref: "Lecture",
     minLength: [2, "That's too short"],
   },
 });
 
+// Define the schema for the Lecture model.
 const lectureSchema = new Schema(
   {
     title: {
@@ -129,10 +133,12 @@ const lectureSchema = new Schema(
       required: false,
       minLength: [2, "That's too short"],
     },
+     // Reference to the teacher who created the lecture.
     user: {
       type: Schema.Types.ObjectId,
       ref: "Teacher",
     },
+     // Array of courses associated with the lecture.
     courses: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Course",
@@ -141,6 +147,7 @@ const lectureSchema = new Schema(
   { timestamps: true }
 );
 
+// Export an array of models, each with its name, schema, and collection name.
 export const models = [
   {
     name: "Teacher",

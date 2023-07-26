@@ -2,12 +2,14 @@ import { Form, useActionData, useLoaderData, useCatch } from "@remix-run/react";
 import { redirect, json } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server.js";
 import { requireUserSession } from "~/sessions.server";
-import {format } from "date-fns"; 
+import { format } from "date-fns";
 
 export async function loader({ params, request }) {
   const session = await requireUserSession(request);
   const db = connectDb();
+  // It fetches the course data from the database based on the courseId.
   const course = await db.models.Course.findById(params.courseId);
+  // Checking if the course is found and if the user has permission to view it
   if (!course) {
     throw new Response(`Couldn't find course with id ${params.courseId}`, {
       status: 404,
@@ -19,16 +21,15 @@ export async function loader({ params, request }) {
       status: 403,
     });
   }
+  // Returning the course data as JSON
   return json(course);
 }
-
 
 export default function Editcourse() {
   const course = useLoaderData();
   const actionData = useActionData();
 
-
-
+  // Rendering the form to edit the course
   return (
     <div>
       <h1 className="mb-4 text-2xl font-bold">Edit Course</h1>
@@ -200,7 +201,6 @@ export default function Editcourse() {
           </p>
         )}
 
-      
         <br />
         <button
           type="submit"
@@ -213,8 +213,6 @@ export default function Editcourse() {
   );
 }
 
-
-
 export function CatchBoundary() {
   const caught = useCatch();
   return (
@@ -226,7 +224,7 @@ export function CatchBoundary() {
     </div>
   );
 }
-
+// Error handeling
 export function ErrorBoundary({ error }) {
   return (
     <div>
@@ -244,8 +242,8 @@ export async function action({ request, params }) {
   const db = connectDb();
 
   try {
+    // Checking if the course is found and if the user has permission to edit it
     const course = await db.models.Course.findById(params.courseId);
-
     if (!course) {
       return new Response(`Couldn't find course with id ${params.courseId}`, {
         status: 404,
@@ -257,18 +255,19 @@ export async function action({ request, params }) {
       });
     }
 
+    // Updating the course data based on the form inputs
     course.course = form.get("course");
     course.education = form.get("education");
     course.teacher = form.get("teacher");
     course.description = form.get("description");
     course.startdate = form.get("startdate");
-    course.enddate =  form.get("enddate");
+    course.enddate = form.get("enddate");
     course.ects = Number(form.get("ects"));
     course.semester = Number(form.get("semester"));
 
-
-
+    // Saving the updated course data in the database
     await course.save();
+    // Redirecting to the course page after successful update
     return redirect(`/courses/${course._id}`);
   } catch (error) {
     return json(

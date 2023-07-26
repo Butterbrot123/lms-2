@@ -10,8 +10,9 @@ export async function loader({ request }) {
 
 export async function action({ request }) {
   const session = await requireUserSession(request);
-  const form = await request.formData();
+  const form = await request.formData()
   const db = connectDb();
+  // Creating a new course object based on the form data
   try {
     const newCourse = new db.models.Course({
       course: form.get("course"),
@@ -24,10 +25,13 @@ export async function action({ request }) {
       semester: Number(form.get("semester")),
       user: session.get("userId"),
     });
+    // Saving the new course to the database
     await newCourse.save();
+    // Updating the teacher's courses list with the newly created course
     const teacher = await db.models.Teacher.findById(session.get("userId"));
     teacher.courses.push(newCourse);
     await teacher.save();
+    // Redirecting to the newly created course's page
     return redirect(`/courses/${newCourse._id}`);
   } catch (error) {
     return json(
@@ -36,12 +40,12 @@ export async function action({ request }) {
     );
   }
 }
-
+// The form to create a new course
 export default function CreateCourse() {
   const actionData = useActionData();
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-bold">Create Course</h1>
+      <h1 className="mb-4 text-2xl font-bold text-blue-500 ">Create Course</h1>
       <Form method="post">
         <div className="mb-4">
           <label htmlFor="course" className="block font-semibold">
@@ -55,9 +59,7 @@ export default function CreateCourse() {
             defaultValue={actionData?.values.course}
             className={[
               "rounded border p-2",
-              actionData?.errors.course
-                ? "border-red-500"
-                : "border-orange-200",
+              actionData?.errors.course ? "border-grey-500" : "border-grey-200",
             ].join(" ")}
           />
           {actionData?.errors.course && (
@@ -80,8 +82,8 @@ export default function CreateCourse() {
             className={[
               "rounded border p-2",
               actionData?.errors.education
-                ? "border-red-500"
-                : "border-orange-200",
+                ? "border-grey-500"
+                : "border-grey-200",
             ].join(" ")}
           />
           {actionData?.errors.education && (
@@ -104,8 +106,8 @@ export default function CreateCourse() {
             className={[
               "rounded border p-2",
               actionData?.errors.description
-                ? "border-red-500"
-                : "border-orange-200",
+                ? "border-grey-500"
+                : "border-grey-200",
             ].join(" ")}
           />
           {actionData?.errors.description && (
@@ -128,8 +130,8 @@ export default function CreateCourse() {
             className={[
               "rounded border p-2",
               actionData?.errors.startdate
-                ? "border-red-500"
-                : "border-orange-200",
+                ? "border-grey-500"
+                : "border-grey-200",
             ].join(" ")}
           />
           {actionData?.errors.startdate && (
@@ -152,8 +154,8 @@ export default function CreateCourse() {
             className={[
               "rounded border p-2",
               actionData?.errors.enddate
-                ? "border-red-500"
-                : "border-orange-200",
+                ? "border-grey-500"
+                : "border-grey-200",
             ].join(" ")}
           />
           {actionData?.errors.enddate && (
@@ -175,7 +177,7 @@ export default function CreateCourse() {
             defaultValue={actionData?.values.ects}
             className={[
               "rounded border p-2",
-              actionData?.errors.ects ? "border-red-500" : "border-orange-200",
+              actionData?.errors.ects ? "border-grey-500" : "border-grey-200",
             ].join(" ")}
           />
           {actionData?.errors.ects && (
@@ -198,8 +200,8 @@ export default function CreateCourse() {
             className={[
               "rounded border p-2",
               actionData?.errors.semester
-                ? "border-red-500"
-                : "border-orange-200",
+                ? "border-grey-500"
+                : "border-grey-200",
             ].join(" ")}
           />
           {actionData?.errors.semester && (
@@ -219,8 +221,8 @@ export default function CreateCourse() {
           placeholder="Teacher"
           defaultValue={actionData?.values.semester}
           className={[
-            "rounded border border-orange-200  p-2",
-            actionData?.errors.teacher ? "border-2 border-red-500" : "",
+            "border-grey-200 rounded border  p-2",
+            actionData?.errors.teacher ? "border-grey-500 border-2" : "",
           ].join(" ")}
         />
         {actionData?.errors.teacher && (
@@ -229,14 +231,14 @@ export default function CreateCourse() {
           </p>
         )}
 
-      
-
-        <button
-          type="submit"
-          className="rounded bg-orange-600 p-2 text-white transition-colors hover:bg-orange-700"
-        >
-          Save
-        </button>
+        <div className="mt-4">
+          <button
+            type="submit"
+            className="rounded bg-blue-500 p-2 text-white transition-colors hover:bg-blue-600"
+          >
+            Save
+          </button>
+        </div>
       </Form>
     </div>
   );
