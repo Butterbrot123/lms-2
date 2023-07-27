@@ -30,8 +30,8 @@ export async function action({ request }) {
       courses: courses.map((course) => course._id),
       teacher: form.get("teacher"),
       description: form.get("description"),
-      date: Date(form.get("date")),
-      time: Date(form.get("time")),
+      date: form.get("date"),
+      time: form.get("time"),
       user: userId,
     });
 
